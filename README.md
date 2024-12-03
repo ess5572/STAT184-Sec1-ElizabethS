@@ -1,5 +1,4 @@
-# STAT184-HW-Template
- STAT184 Github Day 1 HW Template
+**READ ME**
 
 The goal of this repository is to introduce the post one year covid dataset and how the covid vaccine reduces the mortality rate of infection. I'm using the covid_dataset.csv dataset.
 
