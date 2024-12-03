@@ -7,5 +7,5 @@ In this assignment, I went into detail analyzing the mortality rate by vaccine s
 
 We concluded that it is important to look at data in different contexts, but overall that the mortality rate of people 50+ years is higher than those vaccinated, and increasingly so compared to the 50 and under age group.
 
-Contact me:
+Contact me at:
 ess5572@psu.edu
