@@ -1,0 +1,108 @@
+---
+title: "Activity 10 Quarto"
+author: "Kendrick the Third of Québec City"
+format: html
+self-contained: true
+editor: visual
+echo: false
+---
+
+# **Efficacy of the COVID Vaccine**
+
+## Does the COVID vaccine reduce the mortality rate of the COVID infection?
+
+Now that it is 2021 and approximately a year post-outbreak of the COVID-19 infection, the FDA wanted to see from a statistical standpoint if the implementation of the vaccine had any effect on the mortality rate of the COVID infection. This analysis is merely based on the data that we have collected.
+
+```{r}
+#|echo: false
+url <- "https://www.openintro.org/data/csv/simpsons_paradox_covid.csv"
+data <- read.csv(url)
+
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+```
+
+### Mortality Rate by Vaccine Status
+
+```{r}
+#|echo: false
+table(data$vaccine_status, data$outcome)
+mortality_rates_vaccine <- data %>%
+  group_by(vaccine_status) %>%
+  summarize(
+    Total = n(),
+    Deaths = sum(outcome == "death"),
+    mortality_Rate = Deaths / Total
+  )
+ggplot(mortality_rates_vaccine, aes(x = vaccine_status, y = mortality_Rate)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Mortality Rates by Vaccine Status", 
+       x = "Vaccine Status", 
+       y = "Mortality Rate") +
+  theme_minimal()
+```
+
+### Mortality Rate by Age Group
+
+```{r}
+#|echo: false
+mortality_rate_age <- data %>%
+  select(age_group, outcome) %>%
+  group_by(age_group) %>%
+  summarize(
+    Total = n(),
+    Deaths = sum(outcome == "death"),
+    mortality_Rate = Deaths / Total
+  )
+ggplot(mortality_rate_age, aes(x = age_group, y = mortality_Rate)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Mortality Rates by Age", 
+       x = "age_group", 
+       y = "Mortality Rate") +
+  theme_minimal()
+```
+
+### (Our) Study Population by Age and Vaccine Status
+
+```{r}
+#|echo: false
+applications_vaccine_status_age <- data %>%
+  select(age_group, vaccine_status) %>%
+  group_by(age_group, vaccine_status) %>%
+  summarize(
+    Total = n()
+  )
+ggplot(applications_vaccine_status_age, aes(x = age_group, y = Total, fill = vaccine_status)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Study Population by Age and Vaccine Status", 
+       x = "age_group", 
+       y = "Study population") +
+  theme_minimal()
+```
+
+### Mortality Rates by Age Group and Vaccine Status
+
+```{r}
+#|echo: false
+mortality_rates_vaccine_status_age <- data %>%
+  group_by(age_group, vaccine_status) %>%
+  summarize(
+    Total = n(),
+    Deaths = sum(outcome == "death"),
+    mortality_Rate = Deaths / Total
+  )
+
+head(mortality_rates_vaccine_status_age)
+
+ggplot(mortality_rates_vaccine_status_age, aes(x = age_group, y = mortality_Rate, fill = vaccine_status)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Mortality Rates by Age and Vaccine Status", 
+       x = "age_group", 
+       y = "Mortality Rate") +
+  theme_minimal()
+```
+
+### Conclusion:
+
+Ultimately, it is important to look at data in different contexts, because **our initial graph is misleading**, showing that the vaccinated group has a higher mortality rate than the un-vaccinated group, but as we go further into our analysis, we see within this study that the **majority of participants are in the 50 and under range.** Obviously, our data will be skewed to show that there are more participants under 50 dying of the COVID infection no matter what because there are more of them in our data set. If we had an equal number of participants, those graphs would be visually more accurate to what is shown in the final graph, Mortality Rates by Age and Vaccination Status. That graph shows that **the mortality rate of un-vaccinated individuals in the 50+ age group is higher than those vaccinated, and increasingly higher than the under 50 age group.**
